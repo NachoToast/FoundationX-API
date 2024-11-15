@@ -87,6 +87,9 @@ export class ReactRoles {
             );
         }
 
+        // Attempt cache of bot role.
+        await guild.roles.fetch(undefined);
+
         const selfRolePosition = guild.members.me?.roles.botRole?.position;
 
         if (selfRolePosition === undefined) {
