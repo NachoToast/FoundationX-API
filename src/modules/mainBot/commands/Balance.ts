@@ -18,7 +18,7 @@ export class BalanceCommand extends Command {
             );
 
             await interaction.reply({
-                content: `You have **${user.economy.balance.toLocaleString()}** medals!`,
+                content: `You have **${user.economy.balance.toLocaleString()}** FX Shots!`,
                 ephemeral: true,
             });
         } catch (error) {
