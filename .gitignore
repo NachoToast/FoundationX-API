@@ -17,3 +17,5 @@ data/
 .env
 config*.json
 !config.example.json
+
+scripts/manualLink.ts

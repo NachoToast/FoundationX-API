@@ -29,7 +29,9 @@ export interface Config {
             developerId?: DiscordIdString;
             histogramEmoji: string;
             reactRoles: {
-                enabled: boolean;
+                id: string;
+                title: string;
+                description: string;
                 guildId: Snowflake;
                 channelId: Snowflake;
                 roles: {
@@ -40,7 +42,7 @@ export interface Config {
                     addMessage?: string;
                     removeMessage?: string;
                 }[];
-            };
+            }[];
         };
         serverStatsBots: {
             enabled: boolean;

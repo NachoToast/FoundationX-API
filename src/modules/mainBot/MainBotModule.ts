@@ -59,7 +59,7 @@ export class MainBotModule extends Module {
 
         yield await Promise.all([
             this.deploySlashCommands(),
-            this.setupReactRoles(),
+            ...this.setupReactRoles(),
         ]);
     }
 
@@ -106,19 +106,29 @@ export class MainBotModule extends Module {
         };
     }
 
-    private async setupReactRoles(): Promise<ModuleStartupResponse | null> {
+    private setupReactRoles(): Promise<ModuleStartupResponse>[] {
         const { reactRoles } = AppGlobals.config.modules.mainBot;
 
-        if (!reactRoles.enabled) {
-            return null;
-        }
-
-        const message = await new ReactRoles(this.client).start();
-
-        return {
-            message,
-            finishedAt: Date.now(),
-        };
+        return reactRoles.map((configSource) => {
+            return new Promise<ModuleStartupResponse>((resolve, reject) => {
+                new ReactRoles(this.client, configSource)
+                    .start()
+                    .then((message) => {
+                        resolve({
+                            message,
+                            finishedAt: Date.now(),
+                        });
+                    })
+                    .catch((error: unknown) => {
+                        console.log(error);
+                        reject(
+                            error instanceof Error
+                                ? error
+                                : new Error('An unknown error occurred'),
+                        );
+                    });
+            });
+        });
     }
 
     private async handleCommandInvoke(

@@ -24,7 +24,8 @@ interface MessageDocument {
     messageId: Snowflake;
 }
 
-type ReactRole = Config['modules']['mainBot']['reactRoles']['roles'][number];
+type ReactRole =
+    Config['modules']['mainBot']['reactRoles'][number]['roles'][number];
 
 export class ReactRoles {
     private readonly client: Client<true>;
@@ -35,27 +36,31 @@ export class ReactRoles {
 
     private readonly roleIdMap: Map<Snowflake, ReactRole>;
 
+    private readonly configSource: Config['modules']['mainBot']['reactRoles'][number];
+
     private guild: Guild | null;
 
     private channel: TextChannel | null;
 
     private message: Message<true> | null;
 
-    public constructor(client: Client<true>) {
+    public constructor(
+        client: Client<true>,
+        configSource: typeof this.configSource,
+    ) {
         this.client = client;
         this.messageDb = AppGlobals.db.collection('react-role-messages');
-        this.id = `${client.user.id}-${AppGlobals.config.production ? 'prod' : 'dev'}`;
+        this.id = `${client.user.id}-${AppGlobals.config.production ? 'prod' : 'dev'}-${configSource.id}`;
 
         this.guild = null;
         this.channel = null;
         this.message = null;
 
         this.roleIdMap = new Map(
-            AppGlobals.config.modules.mainBot.reactRoles.roles.map((role) => [
-                role.roleId,
-                role,
-            ]),
+            configSource.roles.map((role) => [role.roleId, role]),
         );
+
+        this.configSource = configSource;
     }
 
     public async start(): Promise<string> {
@@ -137,7 +142,7 @@ export class ReactRoles {
 
     /** Attempts to find the existing guild for react-roles. */
     private async fetchGuild(): Promise<void> {
-        const { guildId } = AppGlobals.config.modules.mainBot.reactRoles;
+        const { guildId } = this.configSource;
 
         const guild = await (await this.client.guilds.fetch(guildId)).fetch();
 
@@ -152,7 +157,7 @@ export class ReactRoles {
 
     /** Attempts to find the existing channel for react-roles. */
     private async fetchChannel(): Promise<void> {
-        const { channelId } = AppGlobals.config.modules.mainBot.reactRoles;
+        const { channelId } = this.configSource;
 
         if (this.guild === null) {
             throw new Error(`Tried to fetch channel but guild is null`);
@@ -231,8 +236,8 @@ export class ReactRoles {
 
         const embed = new EmbedBuilder()
             .setColor(embedColour)
-            .setTitle('Personal Roles')
-            .setDescription('Click on a button to add/remove a role!');
+            .setTitle(this.configSource.title)
+            .setDescription(this.configSource.description);
 
         const buttons = new Array<ButtonBuilder>();
 

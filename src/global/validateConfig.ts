@@ -52,35 +52,38 @@ export function validateConfig(config: Config): void {
                 })
                 .child('developerId', ['string', 'undefined'])
                 .child('histogramEmoji', ['string'])
-                .child('reactRoles', ['object', 'undefined'], (reactRoles) => {
-                    reactRoles
-                        .child('enabled', ['boolean'])
-                        .if((reactRoles) => reactRoles.enabled)
-                        ?.child('guildId', ['string'])
-                        .child('channelId', ['string'])
-                        .child('roles', ['array'], (roles) => {
-                            roles.forEach(['object'], (role) => {
-                                role.child('roleId', ['string'])
-                                    .child('label', ['string'])
-                                    .child('style', ['number'], (style) => {
-                                        style
-                                            .integer()
-                                            .min(ButtonStyle.Primary)
-                                            .max(ButtonStyle.Danger);
-                                    })
-                                    .child('emoji', ['string'], (emoji) => {
-                                        emoji.min(1);
-                                    })
-                                    .child('addMessage', [
-                                        'string',
-                                        'undefined',
-                                    ])
-                                    .child('removeMessage', [
-                                        'string',
-                                        'undefined',
-                                    ]);
+                .child('reactRoles', ['array'], (reactRoles) => {
+                    reactRoles.forEach(['object'], (reactRole) => {
+                        reactRole
+                            .child('id', ['string'])
+                            .child('title', ['string'])
+                            .child('description', ['string'])
+                            .child('guildId', ['string'])
+                            .child('channelId', ['string'])
+                            .child('roles', ['array'], (roles) => {
+                                roles.forEach(['object'], (role) => {
+                                    role.child('roleId', ['string'])
+                                        .child('label', ['string'])
+                                        .child('style', ['number'], (style) => {
+                                            style
+                                                .integer()
+                                                .min(ButtonStyle.Primary)
+                                                .max(ButtonStyle.Danger);
+                                        })
+                                        .child('emoji', ['string'], (emoji) => {
+                                            emoji.min(1);
+                                        })
+                                        .child('addMessage', [
+                                            'string',
+                                            'undefined',
+                                        ])
+                                        .child('removeMessage', [
+                                            'string',
+                                            'undefined',
+                                        ]);
+                                });
                             });
-                        });
+                    });
                 });
         })
         .child(

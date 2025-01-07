@@ -23,12 +23,7 @@ const mockedConfig: Config = {
             loginTimeout: 0,
             deployTimeout: 0,
             histogramEmoji: '',
-            reactRoles: {
-                enabled: false,
-                guildId: '',
-                channelId: '',
-                roles: [],
-            },
+            reactRoles: [],
         },
         serverStatsBots: {
             enabled: false,
