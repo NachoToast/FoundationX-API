@@ -22,7 +22,7 @@ export class BaltopCommand extends Command {
 
         await interaction.deferReply();
 
-        const isCurrent = !!interaction.options.getBoolean('current');
+        const isCurrent = !interaction.options.getBoolean('lifetime');
 
         const getValue = isCurrent
             ? (user: UserDocument): number => user.economy.balance
@@ -91,8 +91,8 @@ export class BaltopCommand extends Command {
 
         base.addBooleanOption((option) => {
             return option
-                .setName('current')
-                .setDescription('Show current balance instead of lifetime');
+                .setName('lifetime')
+                .setDescription('Show lifetime balance instead of current')
         });
 
         return base;
