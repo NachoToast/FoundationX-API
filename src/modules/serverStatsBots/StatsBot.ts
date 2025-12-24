@@ -21,7 +21,7 @@ export class StatsBot {
     private static readonly BUFFER_SECONDS = 10;
 
     private static readonly OFFLINE_STATE: PresenceData = {
-        activities: [{ type: ActivityType.Watching, name: 'offline' }],
+        activities: [{ type: ActivityType.Custom, name: 'Offline' }],
         status: 'invisible',
     };
 
