@@ -149,8 +149,8 @@ export class StatsBot {
             this.client.user.setPresence({
                 activities: [
                     {
-                        type: ActivityType.Playing,
-                        name: StatsBot.chooseRandomGame(),
+                        type: ActivityType.Custom,
+                        name: `Playing ${StatsBot.chooseRandomGame()}`,
                     },
                 ],
                 status,
