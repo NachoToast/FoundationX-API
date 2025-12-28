@@ -1,5 +1,5 @@
 # https://docs.docker.com/compose/compose-file/
-name: foundationx
+name: foundationx-old
 services:
     api:
         build: .
